@@ -1,0 +1,65 @@
+@use "@/style/sass/variables" as *;
+
+.root
+{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+	width: 100%;
+
+	.box
+	{
+		width: 95%;
+		max-width: 450px;
+		height: auto;
+		border-radius: 5px;
+		display: flex;
+		gap: 20px;
+		flex-direction: column;
+		padding: 20px;
+		transform: translate(0, -20px);
+
+		.header
+		{
+			.title
+			{
+				font-size: 25px;
+				font-weight: 400;
+			}
+		}
+
+		.body 
+		{
+			height: 100%;
+			display: flex;
+			width: 100%;
+			position: relative;
+			flex-direction: column;
+			align-items: center;
+			padding: 20px 10px 0;
+			gap: 10px;
+
+			.row
+			{
+				width: 100%;
+			}
+
+			.btn
+			{
+				margin: 10px 0 3px auto;
+				background-color: $primary;
+				color: #fff;
+				font-size: 14px;
+				font-weight: 600;
+				height: 25px;
+				border: none;
+				outline: none;
+				padding: 0 10px;
+				cursor: pointer;
+				border-radius: 3px;
+			}
+		}
+	}
+}

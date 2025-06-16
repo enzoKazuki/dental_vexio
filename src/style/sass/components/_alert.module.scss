@@ -1,0 +1,150 @@
+@use "@/style/sass/variables" as *;
+
+.root
+{
+	position: fixed;
+	z-index: 99999;
+	width: auto;
+	max-width: 300px;
+	height: 45px;
+	background-color: #ddd;
+	box-shadow: 0 2px 8px 0 #0003;
+	top: 70px;
+	right: 20px;
+	border-radius: 2px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	padding: 20px 35px 20px 20px;
+	gap: 5px;
+	transform: translate(150px) scale(0.9);
+	transition: .3s;
+	animation: animation .5s ease forwards;
+	min-width: 300px;
+
+	&[data-type="sucess"]
+	{
+		background-color: #2ab86a;
+		
+		.icon
+		{
+			height: 20px;
+			aspect-ratio: 1;
+			position: relative;
+
+			&::after
+			{
+				content: "";
+				position: absolute;
+				height: 12px;
+				width: 5px;
+				border-bottom: 2px solid #fff;
+				border-right: 2px solid #fff;
+				transform: rotate(45deg) translate(3px, -1px);
+			}
+		}
+	}
+
+	&[data-type="warning"]
+	{
+		background-color: #ccb323;
+		gap: 10px;
+		
+		.icon
+		{
+			height: 22px;
+			aspect-ratio: 1;
+			position: relative;
+			transform: translate(-3px);
+			margin: 0 0 2px;
+
+			&::after
+			{
+				content: "";
+				position: absolute;
+				height: 100%;
+				aspect-ratio: 1;
+				background-image: url("/warning.svg");
+				background-position: center;
+				background-repeat: no-repeat;
+				background-size: 90%;
+			}
+		}
+	}
+
+	&[data-type="error"]
+	{
+		background-color: rgba($bg-error, 1.0);
+		gap: 10px;
+		
+		.icon
+		{
+			height: 22px;
+			aspect-ratio: 1;
+			position: relative;
+			transform: translate(-3px);
+			margin: 0 0 2px;
+
+			&::after
+			{
+				content: "";
+				position: absolute;
+				height: 100%;
+				aspect-ratio: 1;
+				background-image: url("/warning.svg");
+				background-position: center;
+				background-repeat: no-repeat;
+				background-size: 90%;
+			}
+		}
+	}
+
+	.text
+	{
+		color: #fff;
+		font-weight: 600;
+		font-size: 15px;
+	}
+
+	.closeBtn 
+	{
+		position: absolute;
+		right: 5px;
+		top: 4px;
+		height: 15px;
+		aspect-ratio: 1;
+		border-radius: 1;
+		cursor: pointer;
+		transition: all .2s ease;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+
+		&::after 
+		{
+			content: "x";
+			color: #fff;
+			font-weight: 200;
+			font-size: 14px;
+			transform: translate(0, -2px);
+		}
+
+		&:hover
+		{
+			background-color: #fff1;
+		}
+	}
+
+	@keyframes animation 
+	{
+		50%
+		{
+			transform: scale(0.9);
+		}	
+		100%
+		{
+			transform: scale(1);
+		}	
+	}
+}

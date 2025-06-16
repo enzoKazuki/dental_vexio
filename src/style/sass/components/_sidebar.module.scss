@@ -1,0 +1,152 @@
+@use "@/style/sass/variables" as *;
+
+.root 
+{
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	padding: 10px;
+	height: 100%;
+	width: 50%;
+	max-width: 250px;
+	background-color: #00000005;
+	box-shadow: inset -1px 0 0 0 #0001;
+	transition: all .2s ease;
+
+	&[data-status="2"]
+	{
+		margin: 0 0 0 -250px;
+	}
+
+	.body
+	{
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		padding: 0 0 50px;
+		height: 100%;
+		justify-content: center;
+
+		.boxRoot
+		{
+			display: flex;
+			flex-direction: column;
+			width: 100%;
+			height: auto;
+			gap: 10px;
+
+			&[data-status="2"] 
+			{
+				.box 
+				{
+					.icon 
+					{
+						padding: 0 3px 0 0;
+
+						&::after
+						{
+							transform: rotate(-45deg);
+						}
+					}
+				}
+
+				.list 
+				{
+					display: none;
+				}
+			}
+
+			.box
+			{
+				display: flex;
+				flex-direction: row;
+				min-height: 30px;
+				padding: 0 10px;
+				align-items: center;
+				border-radius: 3px;
+				gap: 5px;
+				cursor: pointer;
+				user-select: none;
+				z-index: 1;
+				transition: all .2s ease;
+				
+				// background-color: #e6e6e6;
+				// box-shadow: 0 1px 10px 0 #00000005;
+				// &:hover
+				// {
+				// 	background-color: #eeeeee;
+				// }
+
+				.text
+				{
+					color: #000;
+					font-size: 14px;
+					font-weight: 600;
+					margin: 1px 0 0;
+				}
+
+				.icon
+				{
+					height: 20px;
+					width: 20px;
+					position: relative;
+					display: flex;
+					flex-direction: row;
+					align-items: center;
+					justify-content: center;
+					padding: 0 0 5px;
+
+					&::after
+					{
+						content: "";
+						position: relative;
+						width: 6px;
+						aspect-ratio: 1;
+						box-shadow: 1.5px 1.5px 0 0 #000;
+						transform-origin: center;
+						transform: rotate(45deg);
+					}
+				}
+			}
+
+			.list 
+			{
+				padding: 0 10px;
+				z-index: 0;
+				display: flex;
+				flex-direction: column;
+				box-shadow: inset 2px 0 0 0 $primary;
+				width: calc(100% - 34px);
+				margin: 0 auto;
+
+				.item 
+				{
+					display: flex;
+					flex-direction: row;
+					align-items: center;
+					height: 30px;
+					width: 100%;
+					padding: 0 3px;
+					background-color: #fff1;
+					cursor: pointer;
+					user-select: none;
+
+					&:hover
+					{
+						.text
+						{
+							font-weight: 600;
+						}
+					}
+					
+					.text
+					{
+						font-size: 14px;
+						letter-spacing: 0.2px;
+					}
+				}
+			}
+		}
+	}
+}

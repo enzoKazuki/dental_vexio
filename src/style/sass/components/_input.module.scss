@@ -1,0 +1,51 @@
+@use "@/style/sass/variables" as *;
+
+.root
+{
+	display: flex;
+	flex-direction: column;
+	gap: 3px;
+	position: relative;
+	width: 100%;
+
+	.label 
+	{
+		font-weight: 500;
+		font-size: 13px;
+		width: fit-content;
+		margin: 2px auto 0 5px;
+	}
+
+	.input 
+	{
+		outline: none;
+		border: none;
+		border-radius: 2px;
+		height: 30px;
+		font-size: 14px;
+		width: calc(100% - 6px);
+		background-color: #fff;
+		box-shadow: 0 0 0 1px #00000010, 0 1px 5px 0 #00000005;
+		padding: 0 10px;
+		margin: 0 auto;
+
+		&[type="password"]
+		{
+			font-size: 12px;
+		}
+
+		&:is(:-webkit-autofill, :autofill) {
+			box-shadow: 0 0 0 1px #00000010, 0 1px 5px 0 #00000005, inset 0 0 0 300px #fff;
+
+			&:focus 
+			{
+				box-shadow: 0 0 0 1px $primary, 0 1px 5px 0 #00000015, inset 0 0 0 300px #fff;
+			}
+		}
+		
+		&:focus 
+		{
+			box-shadow: 0 0 0 1px $primary, 0 1px 5px 0 #00000015;
+		}
+	}
+}

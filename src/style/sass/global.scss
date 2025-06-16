@@ -1,0 +1,32 @@
+@use "./variables" as *;
+
+@font-face 
+{
+	font-family: "default";
+	src: url("../fonts/Nunito-VariableFont_wght.ttf");
+}
+
+body 
+{
+	padding: 0;
+	margin: 0;
+	border: 0;
+	background-color: $bg-body;
+	width: 100vw;
+	height: 100vh;
+
+	*
+	{
+		font-family: "default";
+		scrollbar-color: #f0f0f03b transparent;
+		scrollbar-width: thin;
+		-webkit-tap-highlight-color: transparent;
+		box-sizing: border-box;
+		letter-spacing: 0.1px;
+
+		&::selection
+		{
+			background-color: rgba($primary, 50%);
+		}
+	}
+}
