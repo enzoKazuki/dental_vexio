@@ -7,9 +7,9 @@ export default function Layout({children}: {children: ReactNode}) {
 		<>
 			<title>Vexio</title>
 			<div className={style.root}>
-				<Sidebar />
+				<Header />
 				<div className={style.main}>
-					<Header />
+					<Sidebar />
 					<div className={style.content}>
 						{children}
 					</div>

@@ -3,12 +3,15 @@
 import style from "@/style/sass/app/_agendamento.module.scss"
 import { startTransition, useEffect, useState, MouseEvent } from "react";
 import { get } from "./actions";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
+	const router = useRouter();
+
 	const [dados, setDados] = useState<any[]>([]);
 	const [dataStart, setDataStart] = useState<Date | null>();
 	const [dataEnd, setDataEnd] = useState<Date | null>();
-	const [periodo, setPeriodo] = useState<any>(1);
+	const [periodo, setPeriodo] = useState<any>(2);
 	const [timeoutReload, setTimeoutReload] = useState<number>(0);
 
 	const [mesList] = useState<string[]>([
@@ -35,7 +38,6 @@ export default function Page() {
 		"Sábado"
 	])
 	const [horaList] = useState<string[]>([
-		"06:00",
 		"07:00",
 		"08:00",
 		"09:00",
@@ -49,8 +51,6 @@ export default function Page() {
 		"17:00",
 		"18:00",
 		"19:00",
-		"20:00",
-		"21:00",
 	])
 
 	const clickPeriodo = (event: MouseEvent) => {
@@ -189,24 +189,61 @@ export default function Page() {
 	};
 
 	const getTopAgendamento = (data: Date) => {
-		const base = horaList.findIndex(h => h == (data.getHours() + ":00")) * 40;
-		const variavel = (data.getMinutes() / 60) * 40;
+		const base = horaList.findIndex(h => h == (Math.max(Math.min(data.getHours(), 19), 7).toString().padStart(2, "0") + ":00")) * 60;
+		const variavel = (data.getMinutes() / 60) * 60;
 
 		return base + variavel;
 	}
 
-	const getHeightAgendamento = (data: Date, duracao: string) => {
-		const base = horaList.findIndex(h => h == (data.getHours() + ":00")) * 40;
-		const variavel = (data.getMinutes() / 60) * 40;
+	const getHeightAgendamento = (dtinicio: Date, dtfim: Date) => {
+		const base = horaList.findIndex(h => h == (Math.max(Math.min(dtinicio.getHours(), 19), 7).toString().padStart(2, "0") + ":00")) * 60;
+		const variavel = (dtinicio.getMinutes() / 60) * 60;
 		const top = base + variavel;
-
-		console.log(duracao);
-
-		const baseH = horaList.findIndex(h => h == (duracao.split(":")[0] + ":00")) * 40;
-		const variavelH = (Number(duracao.split(":")[1]) / 60) * 40;
+		
+		const baseH = horaList.findIndex(h => h == (Math.max(Math.min(dtfim.getHours(), 19), 7).toString().padStart(2, "0") + ":00")) * 60;
+		const variavelH = (dtfim.getMinutes() / 60) * 60;
 		const height = baseH + variavelH;
 
 		return height - top;
+	}
+
+	const getDiferencaData = (dtInicio: Date, dtFim: Date) => {
+		const newInicio = new Date(dtInicio.setHours(Math.max(Math.min(dtInicio.getHours(), 19), 7)))
+		const newFim = new Date(dtFim.setHours(Math.max(Math.min(dtFim.getHours(), 19), 7)))
+
+		const diffMs = newFim.getTime() - newInicio.getTime();
+		const diffMin = Math.floor(diffMs / 60000);
+		const hours = Math.floor(diffMin / 60);
+		const minutes = diffMin % 60;
+
+		return `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`;
+	}
+
+	const temData = (dtInicio: Date, dtFim: Date, dia: Date) => {
+		const lista = dados.map(d => {
+			const dInicio = new Date(d.dtinicio);
+			const dFim = new Date(d.dtfim);
+
+			const mesmoDia = dInicio.getFullYear() === dia.getFullYear()
+				&& dInicio.getMonth() === dia.getMonth()
+				&& dInicio.getDate() === dia.getDate();
+
+			if (dInicio < new Date(dtFim.setHours(Math.max(Math.min(dtFim.getHours(), 19), 7))) && dFim > new Date(dtInicio.setHours(Math.max(Math.min(dtInicio.getHours(), 19), 7))) && mesmoDia) {
+				return getDiferencaData(dInicio, dFim);
+			}
+
+			return null;
+		})
+		.filter(d => d !== null);
+
+		const listaNumber = lista.map(d => parseFloat(d.replaceAll(":", "")));
+
+		const maximo = Math.max(...listaNumber);
+		const difLocal = parseFloat(getDiferencaData(dtInicio, dtFim).replaceAll(":", ""));
+
+		if (lista.length == 1) return 0;
+		if (difLocal < maximo) return 1;
+		if (difLocal >= maximo) return 2;
 	}
 
 	useEffect(() => {
@@ -218,9 +255,11 @@ export default function Page() {
 			if (timeoutReload == 0 && dataStart && dataEnd) {
 				setTimeout(() => {
 					startTransition(async () => {
-						const data = await get(new Date(dataStart.setHours(0)), new Date(dataEnd.setHours(23)));
+						const data = await get(new Date(new Date(new Date(new Date(dataStart).setUTCHours(0)).setUTCMinutes(0)).setUTCSeconds(0)), new Date(new Date(new Date(new Date(dataEnd).setUTCHours(23)).setUTCMinutes(59)).setUTCSeconds(59)));
 
 						setDados(data ?? []);
+
+						console.log(data);
 					})
 
 					setTimeoutReload(0);
@@ -238,7 +277,7 @@ export default function Page() {
 					Agendamentos
 				</span>
 				<div className={style.division} />
-				<button className={style.btn}>
+				<button className={style.btn} onClick={() => router.push("/agendamento/add")}>
 					Adicionar agendamento
 				</button>
 			</div>
@@ -271,11 +310,11 @@ export default function Page() {
 									Semana
 								</span>
 							</div>
-							<div className={style.item} data-index={3} onClick={clickPeriodo} data-selected={periodo == 3}>
+							{/* <div className={style.item} data-index={3} onClick={clickPeriodo} data-selected={periodo == 3}>
 								<span className={style.text}>
 									Mês
 								</span>
-							</div>
+							</div> */}
 						</div>
 					</div>
 					<div className={style.body}>
@@ -306,12 +345,58 @@ export default function Page() {
 											{dataIgual(new Date(), dataStart ?? new Date()) && " (hoje)"}
 										</span>
 									</div>
-									{horaList.map((hora, index) => (
-										<div className={style.boxHora} key={index}>
-											<div className={style.sub} />
-											<div className={style.sub} />
-										</div>
-									))}
+									<div className={style.content}>
+										{horaList.map((hora, index) => (
+											<div className={style.boxHora} key={index}>
+												<div className={style.sub} />
+												<div className={style.sub} />
+											</div>
+										))}
+										{dados?.map((dado, _index) => {
+											return (
+												<div 
+													className={style.boxAgendamento} 
+													key={_index}
+													style={{
+														top: `${getTopAgendamento(new Date(dado.dtinicio))}px`,
+														height: `${getHeightAgendamento(new Date(dado.dtinicio), new Date(dado.dtfim))}px`,
+														...(dado.corsituacao != null ? { 
+															boxShadow: `0 1px 5px 0 #0001, 
+																			inset 0 0 0 1000px ${dado.corsituacao}19, 
+																			inset 4px 0 0 0 ${dado.corsituacao}` 
+														} : {})
+													}}
+													data-style={getHeightAgendamento(new Date(dado.dtinicio), new Date(dado.dtfim)) <= 60 ? 2 : 1}
+													data-dif={temData(new Date(dado.dtinicio), new Date(dado.dtfim), new Date(new Date(dataStart!).setDate(dataStart!.getDate())))}
+												>
+													<span className={style.title}>
+														<span>
+															{new Date(dado.dtinicio).getHours().toString().padStart(2, "0")}:{new Date(dado.dtinicio).getMinutes().toString().padStart(2, "0")} 
+														</span>
+														{" - "}
+														<span>
+															{new Date(dado.dtfim).getHours().toString().padStart(2, "0")}:{new Date(dado.dtfim).getMinutes().toString().padStart(2, "0")}
+														</span>
+													</span>
+
+													{(dado.titulo ?? dado.nmpaciente) && 
+														<span className={style.subtitle} data-style="1">
+															<span className={style.text}>
+																{dado.titulo ?? dado.nmpaciente}
+															</span>
+														</span>
+													}
+													{dado.nmtipo && 
+														<span className={style.subtitle} data-style="2">
+															<span className={style.text}>
+																({dado.nmtipo})
+															</span>
+														</span>
+													}
+												</div>
+											)
+										})}
+									</div>
 								</div>
 							</>
 						}
@@ -330,8 +415,8 @@ export default function Page() {
 										))}
 									</div>
 								</div>
-								{[...Array(dataEnd?.getDay()! + 1)].map((val, index) => (
-									<div className={style.col} key={index} data-hoje={dataIgual(new Date(), new Date((dataStart?.getDate() ?? 1) + index))}>
+								{dataEnd && [...Array(dataEnd?.getDay()! + 1)].map((val, index) => (
+									<div className={style.col} key={index} data-hoje={dataIgual(new Date(), new Date(new Date(dataStart!).setDate(dataStart!.getDate() + index)))}>
 										<div className={style.header}>
 											<span className={style.textDay}>
 												{semanaList[index]}
@@ -348,7 +433,7 @@ export default function Page() {
 														{(Number(dataStart?.getDate() ?? "1") + index).toString().padStart(2, '0')} 
 														/
 														{((dataStart?.getMonth() ?? 0) + 1).toString().padStart(2, '0')} 
-														{dataIgual(new Date(), new Date((dataStart?.getDate() ?? 1) + index)) && " (hoje)"}
+														{dataIgual(new Date(), new Date(new Date(dataStart!).setDate(dataStart!.getDate() + index))) && " (hoje)"}
 													</>
 												}
 											</span>
@@ -361,19 +446,46 @@ export default function Page() {
 												</div>
 											))}
 											{dados?.map((dado, _index) => {
-												
-												if (new Date(dado.data).getDate() == (dataStart?.getDate()! + index)) return (
+												if (new Date(dado.dtinicio).getDate() == (dataStart?.getDate()! + index)) return (
 													<div 
 														className={style.boxAgendamento} 
 														key={_index}
 														style={{
-															top: `${getTopAgendamento(new Date(dado.data))}px`,
-															height: `${getHeightAgendamento(new Date(dado.data), dado.duracao)}px`
+															top: `${getTopAgendamento(new Date(dado.dtinicio))}px`,
+															height: `${getHeightAgendamento(new Date(dado.dtinicio), new Date(dado.dtfim))}px`,
+															...(dado.corsituacao != null ? { 
+																boxShadow: `0 1px 5px 0 #0001, 
+																				inset 0 0 0 1000px ${dado.corsituacao}19, 
+																				inset 4px 0 0 0 ${dado.corsituacao}` 
+															} : {})
 														}}
+														data-style={getHeightAgendamento(new Date(dado.dtinicio), new Date(dado.dtfim)) <= 60 ? 2 : 1}
+														data-dif={temData(new Date(dado.dtinicio), new Date(dado.dtfim), new Date(new Date(dataStart!).setDate(dataStart!.getDate() + index)))}
 													>
 														<span className={style.title}>
-															{new Date(dado.data).getHours()}:{new Date(dado.data).getMinutes()} - {dado.duracao.split(":")[0]}:{dado.duracao.split(":")[1]}
+															<span>
+																{new Date(dado.dtinicio).getHours().toString().padStart(2, "0")}:{new Date(dado.dtinicio).getMinutes().toString().padStart(2, "0")} 
+															</span>
+															{" - "}
+															<span>
+																{new Date(dado.dtfim).getHours().toString().padStart(2, "0")}:{new Date(dado.dtfim).getMinutes().toString().padStart(2, "0")}
+															</span>
 														</span>
+
+														{(dado.titulo ?? dado.nmpaciente) && 
+															<span className={style.subtitle} data-style="1">
+																<span className={style.text}>
+																	{dado.titulo ?? dado.nmpaciente}
+																</span>
+															</span>
+														}
+														{dado.nmtipo && 
+															<span className={style.subtitle} data-style="2">
+																<span className={style.text}>
+																	({dado.nmtipo})
+																</span>
+															</span>
+														}
 													</div>
 												)
 											})}

@@ -1,0 +1,172 @@
+@use "@/style/sass/variables" as *;
+
+.root
+{
+	width: auto;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	height: auto;
+	max-width: 100%;
+	width: auto;
+	z-index: 1000;
+	padding: 0 3px;
+
+	&[data-w100="true"]
+	{
+		width: 100%;
+
+		.input
+		{
+			width: 100% !important;
+		}
+
+		.list
+		{
+			width: 100% !important;
+		}
+	}
+
+	.label 
+	{
+		font-weight: 500;
+		font-size: 13px;
+		width: fit-content;
+		margin: 2px auto 2px 1px;
+	}
+
+	.input
+	{
+		outline: none;
+		border: none;
+		border-radius: 2px;
+		height: 30px;
+		font-size: 14px;
+		width: calc(100% - 6px);
+		background-color: #fff;
+		box-shadow: 0 0 0 1px #00000010, 0 1px 5px 0 #00000005;
+		padding: 0 13px;
+		margin: 0 auto;
+		padding: 0 30px 0 12px;
+		display: flex;
+		justify-content: space-between;
+		flex-direction: row;
+		align-items: center;
+		cursor: pointer;
+		transition: all .1s ease-in;
+		min-width: fit-content;
+		position: relative;
+
+		.icon
+		{
+			width: auto;
+			height: auto;
+			position: relative;
+			display: flex;
+			transform: translate(15px, -2.5px);
+
+			&::after 
+			{
+				content: "";
+				width: 6px;
+				aspect-ratio: 1;
+				box-shadow: 1.5px 1.5px 0 0 #4e535c;
+				transform: rotate(45deg);
+			}
+		}
+		
+		.text
+		{
+			font-size: 15px;
+			color: #555;
+			white-space: nowrap;
+			position: relative;
+		}
+	}
+
+	&:has(.list:focus)
+	{
+		.input 
+		{
+			box-shadow: 0 0 0 1px $primary, 0 1px 5px 0 #00000015, inset 0 0 0 300px #fff !important;
+		}
+	}
+
+	.list
+	{
+		display: flex;
+		flex-direction: column;
+		padding: 3px;
+		position: absolute;
+		gap: 1px;
+		min-height: auto;
+		z-index: 999009;
+		width: auto;
+		top: 100%;
+		left: 0;
+		background-color: #fff;
+		box-shadow: 0 0 0 1px #00000010, 0 1px 5px 0 #00000005;
+		transform: translate(2px, 3px);
+		overflow: hidden auto;
+		min-width: fit-content;
+		max-height: 200px;	
+		border: none !important;
+		outline: none !important;
+
+		&[data-hidden="true"]
+		{
+			pointer-events: none;
+			opacity: 0;
+		}
+
+		.option
+		{
+			min-height: 30px;
+			width: auto;
+			position: relative;
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			padding: 0 40px 0 10px;
+			cursor: pointer;
+
+			&:hover
+			{
+				background-color: #ffffff09;
+			}
+			
+			&[data-selected="true"]
+			{
+				background-color: #ffffff09;
+				box-shadow: inset 3px 0 0 0 $primary;
+			}
+
+			&[data-style="2"]
+			{
+				cursor: default;
+
+				&:hover
+				{
+					background-color: #0000;
+				}
+
+				.text
+				{
+					color: #8d8d8d;
+					font-weight: 200;
+					font-style: italic;
+				}
+			}
+
+			.text
+			{
+				font-size: 14px;
+				font-weight: 600;
+				color: #555;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+				overflow: hidden;				
+			}
+		}
+	}
+}

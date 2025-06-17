@@ -6,7 +6,7 @@ import { SidebarContextType } from '@/types';
 export const SidebarContext = createContext<SidebarContextType | null>(null);
 
 export const SidebarProvider = ({ children }: { children: ReactNode}) => {
-	const [isHidden, setHidden] = useState<boolean>(false);
+	const [isHidden, setHidden] = useState<boolean>(true);
 
 	return (
 		<SidebarContext.Provider value={{isHidden, setHidden}}>

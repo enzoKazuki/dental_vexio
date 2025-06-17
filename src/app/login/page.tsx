@@ -22,11 +22,7 @@ export default function Page() {
 	return (
 		<div className={style.root}>
 			<div className={style.box}>
-				<div className={style.header}>
-					<span className={style.title}>
-						Login - Vexio
-					</span>
-				</div>
+				<div className={style.logo} />
 				<form className={style.body} action={handleSubmit}>
 					<div className={style.row}>
 						<Input type="text" label="Email" name="email" />

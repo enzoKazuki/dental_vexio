@@ -7,6 +7,10 @@
 	gap: 3px;
 	position: relative;
 	width: 100%;
+	height: auto;
+	overflow: visible;
+	gap: 2px;
+	align-items: center;
 
 	.label 
 	{
@@ -26,7 +30,7 @@
 		width: calc(100% - 6px);
 		background-color: #fff;
 		box-shadow: 0 0 0 1px #00000010, 0 1px 5px 0 #00000005;
-		padding: 0 10px;
+		padding: 0 13px;
 		margin: 0 auto;
 
 		&[type="password"]
@@ -34,18 +38,62 @@
 			font-size: 12px;
 		}
 
-		&:is(:-webkit-autofill, :autofill) {
-			box-shadow: 0 0 0 1px #00000010, 0 1px 5px 0 #00000005, inset 0 0 0 300px #fff;
+		&::placeholder 
+		{
+			color: #999;
+		}
+
+		&:is(:-webkit-autofill, :autofill) 
+		{
+			box-shadow: 0 0 0 1px #00000010, 0 1px 5px 0 #00000015, inset 0 0 0 300px #fff !important;
+			
+			&:focus 
+			{
+				box-shadow: 0 0 0 1px $primary, 0 1px 5px 0 #00000015, inset 0 0 0 300px #fff !important;
+			}
+		}
+
+		&[data-status="error"]
+		{
+			box-shadow: 0 0 0 1px $cl-error, 0 1px 5px 0 #00000015;
 
 			&:focus 
 			{
-				box-shadow: 0 0 0 1px $primary, 0 1px 5px 0 #00000015, inset 0 0 0 300px #fff;
+				box-shadow: 0 0 0 1px $cl-error, 0 1px 5px 0 #00000015;
 			}
 		}
+		
 		
 		&:focus 
 		{
 			box-shadow: 0 0 0 1px $primary, 0 1px 5px 0 #00000015;
+		}
+	}
+
+	.error
+	{
+		background-color: $bg-error;
+		color: #fff;
+		width: fit-content;
+		padding: 2px 10px;
+		font-size: 13px;
+		font-weight: 400;
+		z-index: 100;
+		border-radius: 3px;
+		transform: translate(7px, 9px);
+		margin: 0 auto 13px 0;
+		box-shadow: 0 1px 7px 0 rgba(0, 0, 0, 0.329);
+		
+		&::after 
+		{
+			content: "";
+			background-color: $bg-error;
+			width: 7px;
+			aspect-ratio: 1;
+			position: absolute;
+			transform: rotate(45deg);
+			top: -3.5px;
+			left: 10px;
 		}
 	}
 }

@@ -10,6 +10,7 @@
 	padding: 0 20px;
 	width: 100%;
 	min-height: 35px;
+	height: 35px;
 	box-shadow: 0 1px 0 0 #0001;
 	
 	.menuIcon
@@ -29,5 +30,24 @@
 		{
 			opacity: 1;
 		}
+	}
+
+	.division
+	{
+		margin: auto 7px auto 10px;
+		height: 50%;
+		width: 1px;
+		background-color: #0002;
+	}
+
+	.logo
+	{
+		width: 120px;
+		height: 100%;
+		cursor: pointer;
+		background-image: url("/logo2.png");
+		background-size: 100%;
+		background-position: center;
+		background-repeat: no-repeat;
 	}
 }

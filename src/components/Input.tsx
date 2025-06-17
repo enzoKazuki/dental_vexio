@@ -1,7 +1,8 @@
 import style from "@/style/sass/components/_input.module.scss";
 import { InputProps } from "@/types";
+import { useEffect } from "react";
 
-export const Input = ({ type, label, id, name, placeholder, onChange, autoFocus }: InputProps) => {
+export const Input = ({ type, label, id, name, step, placeholder, onChange, autoFocus, erro }: InputProps) => {
 	return (
 		<div className={style.root}>
 			{label &&
@@ -10,7 +11,13 @@ export const Input = ({ type, label, id, name, placeholder, onChange, autoFocus 
 				</label>
 			}
 
-			<input className={style.input} type={type} id={id ?? name} name={name} placeholder={placeholder} onChange={onChange} autoFocus={autoFocus} spellCheck="false" />
+			<input className={style.input} step={step} type={type} id={id ?? name} name={name} placeholder={placeholder} onChange={onChange} autoFocus={erro != null ? true : autoFocus} spellCheck="false" data-status={erro != null && "error"} />
+
+			{erro &&
+				<span className={style.error}>
+					{erro}
+				</span>
+			}
 		</div>
 	)
 }

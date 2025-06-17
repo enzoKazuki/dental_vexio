@@ -9,6 +9,20 @@
 	height: 100%;
 	width: 100%;
 
+	.logo 
+	{
+		position: relative;
+		top: 1px;
+		left: 50%;
+		transform: translate(-50%, 0);
+		width: 200px;
+		height: 80px;
+		background-image: url('/logo2.png');
+		background-size: 100%;
+		background-position: center;
+		background-repeat: no-repeat;
+	}
+
 	.box
 	{
 		width: 95%;

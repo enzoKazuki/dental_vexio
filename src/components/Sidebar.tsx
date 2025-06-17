@@ -24,9 +24,9 @@ export const Sidebar = () => {
 
 	const clickRedirect = (event: MouseEvent) => {
 		const target = event.currentTarget as HTMLDivElement;
-		const link = target.dataset.link;
+		const link = target.dataset.link as string;
 
-		router.push(link as string);
+		router.push(`${link}`);
 	}
 
 	return (
@@ -48,6 +48,26 @@ export const Sidebar = () => {
 						<div className={style.item} data-link="/agendamento/add" onClick={clickRedirect}>
 							<span className={style.text}>
 								Adicionar agendamento
+							</span>
+						</div>
+					</div>
+				</div>
+				<div className={style.boxRoot}>
+					<div className={style.box} onClick={clickBox}>
+						<div className={style.icon} />
+						<span className={style.text}>
+							Pacientes
+						</span>
+					</div>
+					<div className={style.list}>
+						<div className={style.item} data-link="/paciente" onClick={clickRedirect}>
+							<span className={style.text}>
+								Painel
+							</span>
+						</div>
+						<div className={style.item} data-link="/paciente/add" onClick={clickRedirect}>
+							<span className={style.text}>
+								Adicionar paciente
 							</span>
 						</div>
 					</div>
