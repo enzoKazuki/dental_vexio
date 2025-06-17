@@ -6,6 +6,9 @@
 	flex-direction: column;
 	gap: 10px;
 	padding: 20px 10px;
+	width: 100%;
+	max-width: 1200px;
+	margin: 0 auto;
 
 	& > .header
 	{
@@ -55,12 +58,13 @@
 			width: 100%;
 			height: auto;
 			border-radius: 3px;
+			overflow: hidden;
 			box-shadow: 0 0 0 1px #0001, 0 3px 10px 0 #00000005;
 
 			.header
 			{
 				height: auto;
-				padding: 10px;
+				padding: 20px;
 				display: flex;
 				flex-direction: row;
 				gap: 20px;
@@ -197,7 +201,235 @@
 
 			.body
 			{
+				display: flex;
+				flex-direction: row;
+				box-shadow: 0 -1px 0 0 #0001;
+				overflow: hidden;
+				
+				.col 
+				{
+					display: flex;
+					flex-direction: column;
+					position: relative;
+					width: 100%;
+					background-color: #00000005;
 
+					&[data-hoje="true"] 
+					{
+						.header
+						{
+
+							.textDay,
+							.textDate 
+							{
+								color: $primary-shad;
+							}
+						}
+					}
+					
+					&:not(:last-child)
+					{
+						box-shadow: inset -1px 0 0 0 #0001;
+					}
+
+					&:has(.boxDia) 
+					{
+						box-shadow: 0 0 0 0;
+					}
+					
+					&[data-indicator]
+					{
+						width: auto;
+						z-index: 3;
+
+						.header
+						{
+							z-index: 3;
+						}
+					}
+
+					&:not([data-indicator]) 
+					{
+						.header 
+						{
+							&:not(:has(.textDate))
+							{
+								height: 35px;
+							}
+						}
+					}
+
+					.header 
+					{
+						display: flex;
+						flex-direction: column;
+						align-items: center;
+						justify-content: center;
+						gap: 0;
+						padding: 7px 0 7px;
+						height: 50px;
+						background-color: #eee;
+						box-shadow: inset 0 -1px 0 0 #0001;
+
+						.textDay,
+						.textDate 
+						{
+							font-size: 14px;
+							color: #777;
+							font-weight: 600;
+
+							&.textDate
+							{
+								font-size: 13px;
+								margin: -2px 0 0;
+							}
+						}
+					}
+
+					&[data-indicator] > .content
+					{
+						background-color: #eee;
+						box-shadow: 1px 0 0 0 #0001, 0 0 15px 0 #00000005;
+
+						.boxHora 
+						{
+							box-shadow: 0 0 0 0 #0000;
+							background-color: #0000 !important;
+						}
+					}
+
+					&:last-child 
+					{
+						.boxHora 
+						{
+							box-shadow: 0 0 0 0 !important;
+						}
+
+						.boxDia 
+						{
+							box-shadow: inset 0 -1px 0 0 #0001;
+
+							&:last-child
+							{
+								box-shadow: 0 0 0 0 !important;
+							}
+						}
+					}
+
+					.boxDia 
+					{
+						height: 80px;
+						background-color: #eee;
+						width: 100%;
+						box-shadow: inset -1px -1px 0 0 #0001;
+						
+						&:last-child
+						{
+							box-shadow: inset -1px 0 0 0 #0001;
+						}
+
+						&[data-difmes]
+						{
+							filter: brightness(0.9);
+							background-color: #00000001;
+
+							.textDia
+							{
+								color: #bbb;
+							}
+						}
+
+						.textDia
+						{
+							font-size: 13px;
+							font-weight: 600;
+							color: #888;
+							margin: 6px;
+						}
+					}
+
+					.boxAgendamento
+					{
+						position: absolute;
+						z-index: 100;
+						left: 50%;
+						top: 0;
+						transform: translate(-50%, 50px);
+						width: 90%;
+						padding: 0 5px;
+						background-color: #fff;
+						box-shadow: 
+							0 0 0 1px #0001, 
+							0 1px 5px 0 #0001,
+							inset 0 0 0 1000px rgba(#ff0000, 0.02),
+							-4px 0 0 0 #ff0000
+						;
+						overflow: hidden;
+						border-radius: 2px;
+
+						.title 
+						{
+							font-size: 12px;
+							font-weight: 700;
+						}
+					}
+
+					.boxHora
+					{
+						height: 40px;
+						width: 100%;
+						display: flex;
+						flex-direction: column;
+						align-items: center;
+						justify-content: center;
+						z-index: 1;
+						background-color: #eee;
+						box-shadow: inset -1px 0 0 0 #0001;
+						
+						&:nth-child(even)
+						{
+							z-index: 2;
+							box-shadow: 0 0 0 0;
+							background-color: #0000;
+						}
+
+						&:has(.text)
+						{
+							padding: 0 10px;
+
+							&:not(:last-child)
+							{
+								box-shadow: 0 1px 0 0 #0001;
+							}
+						}
+
+						.text
+						{
+							font-size: 13px;
+							color: #888;
+							font-weight: 600;
+						}
+						
+						.sub 
+						{
+							height: 100%;
+							width: 100%;
+						}
+
+						.sub
+						{
+							box-shadow: 0 1px 0 0 #0001;
+						}
+						
+						&:last-child
+						{
+							.sub:last-child
+							{
+								box-shadow: 0 1px 0 0 #0000;
+							}
+						}
+					}
+				}
 			}
 		}
 	}
